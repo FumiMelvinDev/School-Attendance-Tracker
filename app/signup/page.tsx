@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 
-function LoginPage() {
+function SignupPage() {
   const [isPending, startTransition] = useTransition();
 
   const handleSubmit = (formData: FormData) => {
@@ -38,15 +38,38 @@ function LoginPage() {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle className="bg-[#F0F4FB] text-center text-primary px-4 py-2 border border-primary rounded-sm">
-            Teacher's login
+            Teacher's signup
           </CardTitle>
           <CardDescription>
-            Login to your account to manage attendance records for your classes.
+            Signup to your account to manage attendance records for your
+            classes.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form action={handleSubmit}>
             <div className="flex flex-col gap-6">
+              <div className="grid gap-2">
+                <Label htmlFor="surname" className="text-[#212529] font-[400]">
+                  Surname
+                </Label>
+                <Input
+                  id="surname"
+                  type="surname"
+                  required
+                  disabled={isPending}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="initials" className="text-[#212529] font-[400]">
+                  Initials
+                </Label>
+                <Input
+                  id="initials"
+                  type="initials"
+                  required
+                  disabled={isPending}
+                />
+              </div>
               <div className="grid gap-2">
                 <Label htmlFor="email" className="text-[#212529] font-[400]">
                   Email
@@ -86,7 +109,7 @@ function LoginPage() {
         </CardContent>
         <CardFooter className="flex-col gap-2">
           <Button type="submit" className="w-full bg-primary">
-            Login
+            Signup
           </Button>
         </CardFooter>
       </Card>
@@ -94,4 +117,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default SignupPage;
