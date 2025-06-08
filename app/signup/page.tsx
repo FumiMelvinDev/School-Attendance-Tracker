@@ -13,12 +13,36 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { signupAction } from "@/actions/users";
+import { Loader2 } from "lucide-react";
 
 function SignupPage() {
   const [isPending, startTransition] = useTransition();
 
+  const router = useRouter();
+
   const handleSubmit = (formData: FormData) => {
-    console.log("handle submit");
+    startTransition(async () => {
+      const display_name = formData.get("display_name") as string;
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
+
+      let errrorMessage;
+      let toastMessage;
+
+      errrorMessage = (await signupAction(display_name, email, password))
+        .errorMessage;
+      toastMessage = "Signup successful! Check your email for verification.";
+
+      if (!errrorMessage) {
+        toast.success(toastMessage, { position: "top-right" });
+        router.replace("/login");
+      } else {
+        toast.error(errrorMessage);
+      }
+    });
   };
 
   return (
@@ -45,27 +69,20 @@ function SignupPage() {
             classes.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form action={handleSubmit}>
+        <form action={handleSubmit}>
+          <CardContent>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="surname" className="text-[#212529] font-[400]">
-                  Surname
+                <Label
+                  htmlFor="display_name"
+                  className="text-[#212529] font-[400]"
+                >
+                  Name
                 </Label>
                 <Input
-                  id="surname"
-                  type="surname"
-                  required
-                  disabled={isPending}
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="initials" className="text-[#212529] font-[400]">
-                  Initials
-                </Label>
-                <Input
-                  id="initials"
-                  type="initials"
+                  id="display_name"
+                  type="text"
+                  name="display_name"
                   required
                   disabled={isPending}
                 />
@@ -76,6 +93,7 @@ function SignupPage() {
                 </Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="m@example.com"
                   required
@@ -99,19 +117,20 @@ function SignupPage() {
                 </div>
                 <Input
                   id="password"
+                  name="password"
                   type="password"
                   required
                   disabled={isPending}
                 />
               </div>
             </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full bg-primary">
-            Signup
-          </Button>
-        </CardFooter>
+          </CardContent>
+          <CardFooter className="flex-col mt-8">
+            <Button className="w-full bg-primary">
+              {isPending ? <Loader2 className="animate-spin" /> : "Signup"}
+            </Button>
+          </CardFooter>
+        </form>
       </Card>
     </div>
   );

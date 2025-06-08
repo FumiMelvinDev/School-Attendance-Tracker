@@ -13,12 +13,34 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { loginAction } from "@/actions/users";
+import { Loader2 } from "lucide-react";
 
 function LoginPage() {
   const [isPending, startTransition] = useTransition();
 
+  const router = useRouter();
+
   const handleSubmit = (formData: FormData) => {
-    console.log("handle submit");
+    startTransition(async () => {
+      const email = formData.get("email") as string;
+      const password = formData.get("password") as string;
+
+      let errorMessage;
+      let toastMessage;
+
+      errorMessage = (await loginAction(email, password)).errorMessage;
+      toastMessage = "Login successful! Redirecting...";
+
+      if (!errorMessage) {
+        toast.success(toastMessage, { position: "top-right" });
+        router.replace("/");
+      } else {
+        toast.error(errorMessage);
+      }
+    });
   };
 
   return (
@@ -44,8 +66,8 @@ function LoginPage() {
             Login to your account to manage attendance records for your classes.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <form action={handleSubmit}>
+        <form action={handleSubmit}>
+          <CardContent>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
                 <Label htmlFor="email" className="text-[#212529] font-[400]">
@@ -53,6 +75,7 @@ function LoginPage() {
                 </Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="m@example.com"
                   required
@@ -76,19 +99,20 @@ function LoginPage() {
                 </div>
                 <Input
                   id="password"
+                  name="password"
                   type="password"
                   required
                   disabled={isPending}
                 />
               </div>
             </div>
-          </form>
-        </CardContent>
-        <CardFooter className="flex-col gap-2">
-          <Button type="submit" className="w-full bg-primary">
-            Login
-          </Button>
-        </CardFooter>
+          </CardContent>
+          <CardFooter className="flex-col mt-8">
+            <Button className="w-full bg-primary">
+              {isPending ? <Loader2 className="animate-spin" /> : "Login"}
+            </Button>
+          </CardFooter>
+        </form>
       </Card>
     </div>
   );

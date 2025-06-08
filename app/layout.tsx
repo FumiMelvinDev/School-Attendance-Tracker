@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/Header";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Attendance Tracker",
@@ -19,6 +20,7 @@ export default function RootLayout({
           <Header />
           <main className="flex flex-col bg-background">{children}</main>
         </div>
+        <Toaster />
       </body>
     </html>
   );

@@ -1,9 +1,11 @@
+import { getUser } from "@/auth/server";
 import { shadow } from "@/styles/utils";
 import Link from "next/link";
 import React from "react";
 
-function Header() {
-  const user = null;
+async function Header() {
+  const user = await getUser();
+  console.log(user);
 
   return (
     <header
@@ -14,7 +16,7 @@ function Header() {
         Attendify
       </Link>
       <p className="text-lg text-primary font-semibold cursor-none">
-        {user ? `Welcome, ${user}` : ""}
+        {user ? `Welcome, ${user.user_metadata.display_name}` : ""}
       </p>
     </header>
   );
