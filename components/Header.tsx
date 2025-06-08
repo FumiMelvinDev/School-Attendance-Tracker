@@ -2,10 +2,10 @@ import { getUser } from "@/auth/server";
 import { shadow } from "@/styles/utils";
 import Link from "next/link";
 import React from "react";
+import LogoutButton from "./LogoutButton";
 
 async function Header() {
   const user = await getUser();
-  console.log(user);
 
   return (
     <header
@@ -16,7 +16,16 @@ async function Header() {
         Attendify
       </Link>
       <p className="text-lg text-primary font-semibold cursor-none">
-        {user ? `Welcome, ${user.user_metadata.display_name}` : ""}
+        {user ? (
+          <>
+            Welcome, {user.user_metadata.display_name}
+            <span className="ml-4">
+              <LogoutButton />
+            </span>
+          </>
+        ) : (
+          ""
+        )}
       </p>
     </header>
   );
