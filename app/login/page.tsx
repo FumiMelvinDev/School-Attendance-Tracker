@@ -36,7 +36,7 @@ function LoginPage() {
 
       if (!errorMessage) {
         toast.success(toastMessage, { position: "top-right" });
-        router.replace("/");
+        router.replace("/dashboard");
       } else {
         toast.error(errorMessage);
       }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "./globals.css";
+import "../globals.css";
 import Header from "@/components/Header";
 import { Toaster } from "sonner";
 
@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   description: "Attendance for your school.",
 };
 
-export default function RootLayout({
+export default function DashboardLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -17,6 +17,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
         <div className="flex min-h-screen flex-col w-full">
+          <Header />
           <main className="flex flex-col bg-background">{children}</main>
         </div>
         <Toaster />
